@@ -12,7 +12,7 @@ rankall <- function(outcome, num = "best") {
         outcome <- tolower(outcome)
         if (!(outcome %in% names(pruned.data)[c(3, 4, 5)])) stop("invalid outcome")
 
-        ## For each state, find the hospital of the given rank
+        ## Clean the data and sort by outcome and hospital
         keeps <- c("hospital", "state", outcome)
         pruned.data <- pruned.data[keeps]
         cleaned <- subset(pruned.data, pruned.data[outcome] != "Not Available")
@@ -20,7 +20,7 @@ rankall <- function(outcome, num = "best") {
         ordered <- cleaned[order(cleaned[outcome], cleaned["hospital"]),]
         sorted <- split(ordered, ordered$state)
 
-        ## Return a data frame with the hospital names and the (abbreviated) state name
+        ## For each state, find the hospital of the given rank
         result <- data.frame()
         for (i in 1:length(sorted)) {
                 current <- sorted[[i]]
@@ -31,6 +31,7 @@ rankall <- function(outcome, num = "best") {
                 else if (as.numeric(num) > rows) result <- rbind(result, data.frame("hospital"=NA, "state"=current$state[1]))
                 else                             result <- rbind(result, current[num,])
         }
+        ## Return a data frame with the hospital names and the (abbreviated) state name
         row.names(result) <- result$state
         return(result)
 }
