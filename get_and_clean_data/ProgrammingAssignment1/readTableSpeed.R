@@ -36,6 +36,9 @@ fn4 <- function(DT) { mean(DT$pwgtp15,by=DT$SEX) }
 fn5 <- function(DT) { sapply(split(DT$pwgtp15,DT$SEX),mean) }
 fn6 <- function(DT) { DT[,mean(pwgtp15),by=SEX] }
 
-lapply( DT, lapply(funs, do.call())
-
+# Check that each function returns average for both sexes then benchmark them
+# TODO automate this to read a list of functions, check for two outputs, then benchmark
+benchmark(fn3(DT), replications = 1000)
+benchmark(fn5(DT), replications = 1000)
+benchmark(fn6(DT), replications = 1000)
 

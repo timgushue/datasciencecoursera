@@ -1,5 +1,10 @@
+# Credentials #
+###################
+credentials.R
+
 # Assignment Data #
 ###################
 r_programming/ProgrammingAssignment1/specdata/*
 r_programming/ProgrammingAssignment3/data/*
 get_and_clean_data/ProgrammingAssignment1/data/*
+get_and_clean_data/CourseProject/UCI\ HAR\ Dataset/*
