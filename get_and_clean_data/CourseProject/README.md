@@ -1,6 +1,6 @@
+# README
 
-
--------- Study Design --------------------
+## Study Design
 
 The data consumed by this script was collected from the accelerometers from the
 Samsung Galaxy S smartphone. A full description taken from the site where the
@@ -46,34 +46,34 @@ Only measurements of the mean and standard deviations in the time or frequency
 experiments were kept.
 
 
--------- Code Book --------------------
+## Code Book
 
 A description for each variable can be found in the accompaning file: CodeBook.md
 
--------- Instructions --------------------
+## Instructions
 
-- Running the script
+### Running the script
 To generate a tidy data set, run_analysis.R can be executed from the R 
 command-line interpreter:
   > source("run_analysis.R")
 or launched directly from the bash (or a bash like) shell:
   $ R CMD BATCH run_analysis.R
 
-- Raw Data
+### Raw Data
 The script looks for data locally in a file named "UCI HAR Dataset" otherwise it
 will attempt to download it to the local directory from:
   https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 The files necessary to run_analysis.R are:
-  UCI HAR Dataset/activity_labels.txt
-  UCI HAR Dataset/features.txt
-  UCI HAR Dataset/test/X_test.txt
-  UCI HAR Dataset/test/y_test.txt
-  UCI HAR Dataset/test/subject_test.txt
-  UCI HAR Dataset/train/X_train.txt
-  UCI HAR Dataset/train/y_train.txt
-  UCI HAR Dataset/train/subject_train.txt
+ - UCI HAR Dataset/activity_labels.txt
+ - UCI HAR Dataset/features.txt
+ - UCI HAR Dataset/test/X_test.txt
+ - UCI HAR Dataset/test/y_test.txt
+ - UCI HAR Dataset/test/subject_test.txt
+ - UCI HAR Dataset/train/X_train.txt
+ - UCI HAR Dataset/train/y_train.txt
+ - UCI HAR Dataset/train/subject_train.txt
 
-- Processing steps
+### Processing steps
 The UCI HAR Dataset/test/X_test.txt and UCI HAR Dataset/train/X_train.txt are 
 joined together.  The UCI HAR Dataset/test/y_test.txt and 
 UCI HAR Dataset/train/y_train.txt are also joined and then merged together with 
@@ -85,7 +85,7 @@ activity name for it's code and it is merged into the data frame.  Finally all
 the labels are cleaned to make them more human readable and easily processed by 
 the script.
 
--Tidy Data
+### Tidy Data
 For each of the six activities, the average was calculated for each variable for
 each subject.  The six resulting data tables were combined into a final tidy 
 data set with each row coresponding to one distinct activity, subject and (mean 
