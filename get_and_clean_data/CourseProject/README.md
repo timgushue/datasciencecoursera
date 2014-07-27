@@ -55,9 +55,13 @@ A description for each variable can be found in the accompaning file: CodeBook.m
 ### Running the script
 To generate a tidy data set, run_analysis.R can be executed from the R 
 command-line interpreter:
+```
   > source("run_analysis.R")
+```
 or launched directly from the bash (or a bash like) shell:
+```
   $ R CMD BATCH run_analysis.R
+```
 
 ### Raw Data
 The script looks for data locally in a file named "UCI HAR Dataset" otherwise it
