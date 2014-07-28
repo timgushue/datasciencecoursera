@@ -20,7 +20,7 @@
         (normalized and bounded within [-1,1])
 
 
-### ### Mean.Of.Time.Body.Acceleration.mean.Y
+### Mean.Of.Time.Body.Acceleration.mean.Y
        - Average of all average accelerometer raw signals
         attributed to the body along the y-axis.
         (normalized and bounded within [-1,1])
