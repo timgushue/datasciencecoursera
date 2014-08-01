@@ -9,6 +9,8 @@ r_programming/ProgrammingAssignment3/data/*
 
 get_and_clean_data/ProgrammingAssignment1/data/*
 get_and_clean_data/ProgrammingAssignment2/data/*
+get_and_clean_data/ProgrammingAssignment3/data/*
+get_and_clean_data/ProgrammingAssignment4/data/*
+
 get_and_clean_data/CourseProject/UCI\ HAR\ Dataset/*
 get_and_clean_data/CourseProject/tidy.txt
-get_and_clean_data/ProgrammingAssignment3/data/*
