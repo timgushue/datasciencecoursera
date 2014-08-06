@@ -14,3 +14,5 @@ get_and_clean_data/ProgrammingAssignment4/data/*
 
 get_and_clean_data/CourseProject/UCI\ HAR\ Dataset/*
 get_and_clean_data/CourseProject/tidy.txt
+
+exploratory_data_analysis/data/*
