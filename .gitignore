@@ -16,3 +16,4 @@ get_and_clean_data/CourseProject/UCI\ HAR\ Dataset/*
 get_and_clean_data/CourseProject/tidy.txt
 
 exploratory_data_analysis/CourseProject1/data/*
+exploratory_data_analysis/CourseProject2/data/*
