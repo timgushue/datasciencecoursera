@@ -36,7 +36,10 @@ SCC <- readRDS("./data/exdata-data-NEI_data/Source_Classification_Code.rds")
 
 totalEmissions <- NEI[ , c("year", "Emissions")]
 
-png("plot1.png")
+png("plot1.png", width = 960, height = 480)
+par(mfrow=c(1,2))
+
+# Main plot
 plot(totalEmissions$year, totalEmissions$Emissions,
      xaxt='n', xlab="Year", ylab=expression('Tons of emitted PM'[2.5]))
 
@@ -44,5 +47,14 @@ plot(totalEmissions$year, totalEmissions$Emissions,
 abline(lm(totalEmissions$Emissions ~ totalEmissions$year), col="red", lwd=3)
 legend("topright", legend="Linear Fit", col="red",lwd=2)
 title( main="Total PM Emission in the United States")
+axis(1, c(1999,2002,2005,2008))
+
+# Detail plot
+plot(totalEmissions$year, totalEmissions$Emissions,
+     xaxt='n', xlab="Year",
+     ylab=expression('Tons of emitted PM'[2.5]), ylim=c(0,50))
+abline(lm(totalEmissions$Emissions ~ totalEmissions$year), col="red", lwd=3)
+legend("topright", legend="Linear Fit", col="red",lwd=3, bg="white")
+title( main="Detail of PM Emission in the United States")
 axis(1, c(1999,2002,2005,2008))
 dev.off()

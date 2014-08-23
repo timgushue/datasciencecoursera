@@ -37,7 +37,10 @@ SCC <- readRDS("./data/exdata-data-NEI_data/Source_Classification_Code.rds")
 baltimore <- subset(NEI, fips == "24510")
 totalEmissions <- baltimore[ , c("year", "Emissions")]
 
-png("plot2.png")
+png("plot2.png", width = 960, height = 480)
+par(mfrow=c(1,2))
+
+# Main plot
 plot(totalEmissions$year, totalEmissions$Emissions,
      xaxt='n', xlab="Year", ylab=expression('Tons of emitted PM'[2.5]))
 
@@ -46,7 +49,13 @@ abline(lm(totalEmissions$Emissions ~ totalEmissions$year), col="red", lwd=3)
 legend("topright", legend="Linear Fit", col="red",lwd=3)
 title( main="Total PM Emission From Baltimore City, Maryland")
 axis(1, c(1999,2002,2005,2008))
+
+# Detail plot
+plot(totalEmissions$year, totalEmissions$Emissions,
+     xaxt='n', xlab="Year",
+     ylab=expression('Tons of emitted PM'[2.5]), ylim=c(0,50))
+abline(lm(totalEmissions$Emissions ~ totalEmissions$year), col="red", lwd=3)
+legend("topright", legend="Linear Fit", col="red",lwd=3)
+title( main="Detail of PM Emission From Baltimore City, Maryland")
+axis(1, c(1999,2002,2005,2008))
 dev.off()
-
-
-
