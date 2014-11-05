@@ -4,16 +4,16 @@ credentials.R
 
 # Assignment Data #
 ###################
-r_programming/ProgrammingAssignment1/specdata/*
-r_programming/ProgrammingAssignment3/data/*
+02_RProgramming/ProgrammingAssignment1/specdata/*
+02_RProgramming/ProgrammingAssignment3/data/*
 
-get_and_clean_data/ProgrammingAssignment1/data/*
-get_and_clean_data/ProgrammingAssignment2/data/*
-get_and_clean_data/ProgrammingAssignment3/data/*
-get_and_clean_data/ProgrammingAssignment4/data/*
+03_GettingData/ProgrammingAssignment1/data/*
+03_GettingData/ProgrammingAssignment2/data/*
+03_GettingData/ProgrammingAssignment3/data/*
+03_GettingData/ProgrammingAssignment4/data/*
 
-get_and_clean_data/CourseProject/UCI\ HAR\ Dataset/*
-get_and_clean_data/CourseProject/tidy.txt
+03_GettingData/CourseProject/UCI\ HAR\ Dataset/*
+03_GettingData/CourseProject/tidy.txt
 
-exploratory_data_analysis/CourseProject1/data/*
-exploratory_data_analysis/CourseProject2/data/*
+04_ExploratoryAnalysis/CourseProject1/data/*
+04_ExploratoryAnalysis/CourseProject2/data/*
