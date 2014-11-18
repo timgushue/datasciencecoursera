@@ -1,0 +1,92 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
+
+
+## Loading and preprocessing the data
+```{r, echo = TRUE}
+library(data.table)
+data <- fread(unzip("./data/activity.zip"), sep=",", header=TRUE)
+```
+
+## What is mean total number of steps taken per day?
+```{r, echo = TRUE, results="asis"}
+library(xtable)
+dailySteps <- as.vector(data[,sum(steps), by=date])
+setnames(dailySteps, "V1", "steps")
+hist(dailySteps[,steps], breaks=30, main="Total Daily Steps", xlab = "Steps", col="lightblue")
+mean <- as.vector(data[,mean(steps), by=date])
+setnames(mean, "V1", "mean")
+median <- as.vector(data[,as.double(median(steps)), by=date])
+setnames(median, "V1", "median")
+xt <- xtable(merge(mean,median, by="date"))
+print(xt, type="html")
+```
+
+
+
+## What is the average daily activity pattern?
+```{r, echo=TRUE}
+# sum steps by interval
+intervalSteps <- data[,mean(steps, na.rm=TRUE), by=interval]
+setnames(intervalSteps, "V1", "steps")
+# Pad interval values and convert to POSIXct
+intervalSteps$time <- as.POSIXct(strptime(sprintf("%04d",intervalSteps$interval), format="%H%M"), format = "%H:%M")
+plot(intervalSteps$time, intervalSteps$steps, type="l", xlab="Time", ylab="Steps")
+title("Mean Steps by Hour")
+maxSteps <- cat('Max Steps at: ', strftime(unique(intervalSteps[steps==max(steps), time]), format="%H:%M"))
+print(maxSteps, type='html')
+```
+
+
+
+## Imputing missing values
+```{r, echo=TRUE, results="asis"}
+# Total number of rows with missing values
+incompleteRows <- cat('Rows with missing values: ', sum(is.na(data$steps)))
+print(incompleteRows, type='html')
+
+filledData <- merge(data, intervalSteps, by = "interval")
+filledData[is.na(steps.x), steps.x := as.integer(steps.y)]
+filledData[,steps.y:=NULL]
+setnames(filledData, "steps.x", "steps")
+filledData[order(date,interval)]
+
+dailyFilledSteps <- as.vector(filledData[,sum(steps), by=date])
+setnames(dailyFilledSteps, "V1", "steps")
+hist(dailyFilledSteps[,steps], breaks=30, main="Total Daily Steps", xlab = "Steps", col="lightblue")
+meanFilled <- as.vector(filledData[,mean(steps), by=date])
+setnames(meanFilled, "V1", "mean")
+medianFilled <- as.vector(filledData[,as.double(median(steps)), by=date])
+setnames(medianFilled, "V1", "median")
+xt <- xtable(merge(meanFilled, medianFilled, by="date"))
+print(xt, type="html")
+```
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
+```{r, echo=TRUE}
+library(ggplot2)
+daysOfWeek <- filledData[, weekdays(as.POSIXct(date))]
+isWeekend <- grepl("\\<Saturday\\>|\\<Sunday\\>", daysOfWeek)
+filledData$weekday <- factor(isWeekend, labels = c("weekday", "weekend"))
+weekdayIntervalSteps <- filledData[weekday=='weekday',mean(steps, na.rm=TRUE), by=interval]
+setnames(weekdayIntervalSteps, 'V1', 'steps')
+weekdayIntervalSteps$weekday <- "weekday"
+
+weekendIntervalSteps <- filledData[weekday=='weekend',mean(steps, na.rm=TRUE), by=interval]
+setnames(weekendIntervalSteps, 'V1', 'steps')
+weekendIntervalSteps$weekday <- "weekend"
+
+weekendAverages <- rbind(weekendIntervalSteps, weekdayIntervalSteps)
+
+ggplot(weekendAverages, aes(interval, steps)) +
+        geom_line(color="steelblue") +
+        facet_grid(weekday ~ .) +
+        labs(title="Weekday and Weekend Average Steps by Time") +
+        labs(y="Steps", x="Time")
+
