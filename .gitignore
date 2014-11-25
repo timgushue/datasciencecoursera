@@ -19,3 +19,5 @@ credentials.R
 04_ExploratoryAnalysis/CourseProject2/data/*
 
 05_ReproducibleResearch/CourseProject1/data/*
+05_ReproducibleResearch/CourseProject2/data/*
+05_ReproducibleResearch/CourseProject2/cache/*
