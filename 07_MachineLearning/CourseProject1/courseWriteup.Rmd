@@ -1,0 +1,89 @@
+---
+title: "Course Project: Writeup"
+author: "Tim Gushue"
+date: "August 10, 2015"
+output: html_document
+---
+## Introduction
+The goal of this project was to predict the manner in which participants did an exercise for experiments performed in the *Qualitative Activity Recognition of Weight Lifting Exercises*[5] paper using machine learning on sensor data.  Participants were asked to perform one set of 10 repetitions of the Unilateral Dumbbell Biceps Curl in five different fashions and the movements were recorded by four 9 degrees of freedom inertial measurement units, which provide three-axes acceleration, gyroscope and magnetometer data.  Using a random forest model from R's caret package, the manner an exercise was performed could be predicted with better than 99% accuracy.
+
+## Feature Selection and Data Processing
+To reduce computation cost and feature complexity only the primary sensor data from the experiment was used.  The paper helped with feature selection by indicating wich columns were sensor data: "In each step of the sliding window approach we calculated features on the Euler angles (roll, pitch and yaw), as well as the raw accelerometer, gyroscope and magnetometer readings" [1].  I kept the data for the 4 sensors in three axes and dropped any calculated features that were derived from the raw data. The features were selectively filtered by matching a regular expression on each features suffix:
+(gyros_\*, accel_\*, magnet_\*, roll_\*, pitch_\*, yaw_\*)
+
+
+```{r, warning=FALSE, message=FALSE}
+library(caret)
+set.seed(10937)
+setwd("~/workspace/datasciencecoursera/07_MachineLearning/CourseProject1")
+```
+```{r, cache=TRUE}
+
+rawData <- read.csv("data/pml-training.csv")
+
+toMatch <- c("^gyros_.*", "^accel_.*", "^magnet_.*", "^roll_.*", "^pitch_.*", "^yaw_.*")
+sensors <- grep(paste(toMatch,collapse="|"), names(rawData), value=TRUE)
+```
+
+## Model Training
+The data was split into training and a final test set to compare the in sample versus out of sample errors. The testing set size was selected to be large enough (40% of the total data) to provide a statistically significantly out of sample error accuracy. There is an additional 3rd set of data used for the final project submission but it only has 20 rows and therefore it wasn't large enough to provide a rigorous indication of the model's accuracy. Analysis of that data set is included in the Appendix for reference.
+
+```{r, cache=TRUE}
+sensorData <- rawData[, sensors]
+sensorData$classe <- rawData$classe
+
+inTrain <- createDataPartition(y=sensorData$classe, p=0.6, list=FALSE)
+training <- sensorData[inTrain,]
+testing <- sensorData[-inTrain,]
+```
+
+The model was trained using a random forest with 10-fold cross-validation.  The data set wasn't significantly skewed for any feature and was sufficiently large enough that the variance between folds wasn't an issue.  The in sample error rate is less that 1%, and although the accuracy of the model is always better on the training set, because these data were so well behaved we can expect a similar out of sample error rate of around 1%.  
+
+```{r, cache=TRUE}
+
+# Random forest with cross validation
+modelFit<- train(
+    training$classe ~.,
+    data=training,
+    method="rf",
+    verbose=FALSE,
+    trControl = trainControl("cv")
+)
+inSampleErrorRate <- 1 - modelFit$results[1,]$Accuracy
+inSampleErrorRate
+```
+
+## Results
+The model performed very well on the final validation/test set.  The out of sample error is less than 1% as estimated above using cross-validation.
+```{r, cache=TRUE}
+# Verifying accuracy on validation[testing] set
+predictions <- predict(modelFit, testing)
+confusionMatrix(predictions, testing$classe)
+```
+
+## References
+[1] E. Velloso, A. Bulling, H. Gellersen, W. Ugulino and H. Fuks (2013), “Qualitative Activity Recognition of Weight Lifting Exercises,” in 4th Augmented Human International Conference (AugmentedHuman 2013). 
+
+## Appendix
+### Predicting the actual test set for submission
+```{r, cache=TRUE}
+rawTestData <- read.csv("data/pml-testing.csv")
+toMatch <- c("^gyros_.*", "^accel_.*", "^magnet_.*", "^roll_.*", "^pitch_.*", "^yaw_.*")
+sensors <- grep(paste(toMatch,collapse="|"), names(rawTestData), value=TRUE)
+sensorTestData <- rawTestData[, sensors]
+sensorTestData$problem_id <- rawTestData$problem_id
+
+testPredictions <- predict(modelFit, sensorTestData)
+answers <- as.character(testPredictions)
+
+pml_write_files = function(x){
+    n = length(x)
+    for(i in 1:n){
+        filename = paste0("problem_id_",i,".txt")
+        write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+    }
+}
+setwd("~/workspace/datasciencecoursera/07_MachineLearning/CourseProject1/results")
+#pml_write_files(answers)
+
+```

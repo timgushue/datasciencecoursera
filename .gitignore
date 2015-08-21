@@ -21,3 +21,7 @@ credentials.R
 05_ReproducibleResearch/CourseProject1/data/*
 05_ReproducibleResearch/CourseProject2/data/*
 05_ReproducibleResearch/CourseProject2/cache/*
+
+07_MachineLearning/CourseProject1/data/*
+07_MachineLearning/CourseProject1/results/*
+07_MachineLearning/quizes/
